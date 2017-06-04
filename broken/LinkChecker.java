@@ -72,10 +72,19 @@ public class LinkChecker {
 		String find = "href=";
 		if (s.contains(find)) {
 			int hrefIndex = s.indexOf(find);
-			int linkStartIndex = hrefIndex + 6;
-			String linkAndTag = s.substring(linkStartIndex, s.length());
-			int linkEndIndex = linkAndTag.indexOf('"');
-			String linkString = linkAndTag.substring(0, linkEndIndex);
+			int linkStartIndex = hrefIndex + 5;
+			String linkAndTag;
+			int linkEndIndex;
+			String linkString = "";
+			if (s.charAt(linkStartIndex) == '"'){
+				linkAndTag = s.substring(linkStartIndex + 1, s.length());
+				linkEndIndex = linkAndTag.indexOf('"');
+				linkString += linkAndTag.substring(0, linkEndIndex);
+			} else if (s.charAt(linkStartIndex) == '\'') {
+				linkAndTag = s.substring(linkStartIndex + 1, s.length());
+				linkEndIndex = linkAndTag.indexOf('\'');
+				linkString += linkAndTag.substring(0, linkEndIndex);
+			}
 			try {
 				URL link = new URL(linkString);
 				HttpURLConnection http = (HttpURLConnection)link.openConnection();
